@@ -4,19 +4,12 @@ addons:
     update: true
     packages:
     - zlib1g-dev
-language: cpp
-compiler:
-  - clang
-  - gcc
-install: ./autogen.sh
+  sonarcloud:
+    organization: "dns-oarc"
+    token:
+      secure: "AAljmN2wDwgKJmdQytRT9PQyeQQvHF3KlUxpR1MK02qXlgpgbo4dbjAXdMeUVhXW6jpoWvZGT9xKGlkFa+ARmeU2BLRli5WgchEzEgdNDwlz6rt2nS0knxz5Laz8jk6t5V3v/aYkOQlt4VRFelnOIK+uNtbxjSl6Qgoy5+ap8zo="
 script:
+  - ./autogen.sh
   - ./configure
-  - make dist
-  - tar zxvf *.tar.gz
-  - cd packetq-[0-9]*
-  - mkdir build
-  - cd build
-  - ../configure
-  - make
-  - make test
-  - src/packetq -v
+  - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
+  - sonar-scanner
